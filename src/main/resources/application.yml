@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      uri: ${URI:mongodb://localhost:27017}
+      database: ${DATABASE:sender-test}
+server:
+  port: ${PORT:1021}
