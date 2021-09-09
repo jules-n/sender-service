@@ -1,7 +1,7 @@
 plugins {
-	id 'org.springframework.boot' version '2.5.4'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.5.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
 }
 
 group = 'com.ynero.ss'
@@ -9,29 +9,46 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.kafka:spring-kafka'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.projectreactor:reactor-test'
-	testImplementation 'org.springframework.kafka:spring-kafka-test'
+    //spring
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    //shared
+    implementation 'com.jules.ss:sending-lib:0.0.1'
+
+    //lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    //mongo
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    //mongock
+    implementation platform("com.github.cloudyrock.mongock:mongock-bom:${mongockVersion}")
+    implementation 'com.github.cloudyrock.mongock:mongock-spring-v5'
+    implementation 'com.github.cloudyrock.mongock:mongodb-springdata-v3-driver'
+
+    //pub/sub
+    implementation platform('com.google.cloud:libraries-bom:20.9.0')
+    implementation 'com.google.cloud:google-cloud-pubsub'
+
+    //kafka
+    implementation 'org.springframework.kafka:spring-kafka'
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 wrapper {
-	gradleVersion = project.findProperty('org.gradle.version')
+    gradleVersion = project.findProperty('org.gradle.version')
 }
