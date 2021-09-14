@@ -2,6 +2,27 @@ spring:
   data:
     mongodb:
       uri: ${URI:mongodb://localhost:27017}
-      database: ${DATABASE:sender-test}
+      database: ${DATABASE:sender-service}
+  kafka:
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: '*'
+            value:
+              default:
+                type: java.lang.Object
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-serializer: org.springframework.kafka.support.serializer.ToStringSerializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.ToStringSerializer
 server:
-  port: ${PORT:1021}
+  port: ${PORT:1025}
+mongock:
+  start-system-version: 1
+  change-logs-scan-package:
+    - com.ynero.ss.senderservice.migration

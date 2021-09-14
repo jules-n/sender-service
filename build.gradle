@@ -25,6 +25,8 @@ dependencies {
 
     //shared
     implementation 'com.jules.ss:sending-lib:0.0.1'
+    implementation 'com.jules.ss:converters:1.0.1'
+    implementation 'com.jules.ss:common-dtos:1.0.5'
 
     //lombok
     compileOnly 'org.projectlombok:lombok'
