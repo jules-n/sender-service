@@ -1,16 +1,21 @@
 package com.ynero.ss.senderservice.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.UUID;
+import static com.ynero.ss.senderservice.domain.PortSendingData.COLLECTION_NAME;
 
-@Builder
-@Document(collection = PortSendingData.COLLECTION_NAME)
-public class PortSendingData extends  DeviceSendingData{
-    public final static String COLLECTION_NAME = "ports-data";
+@SuperBuilder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper=false)
+@Document(collection = COLLECTION_NAME)
+public class PortSendingData extends DeviceSendingData {
+    public static final String COLLECTION_NAME= "port-sending-data";
     private String portName;
 }
