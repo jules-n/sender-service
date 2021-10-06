@@ -3,16 +3,28 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'com.coditory.integration-test' version '1.2.3'
     id 'java'
+    id "com.palantir.git-version" version "0.12.3"
 }
-
-group = 'com.ynero.ss'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
 
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+}
+bootJar {
+    archiveFileName = "${project.name}.jar"
+}
+group = 'com.ynero.ss'
+version gitVersion()
+sourceCompatibility = '11'
+targetCompatibility = '11'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+springBoot {
+    buildInfo()
 }
 
 repositories {
@@ -23,11 +35,13 @@ repositories {
 dependencies {
     //spring
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.5.3'
 
     //shared
     implementation 'com.jules.ss:sending-lib:0.0.1'
     implementation 'com.jules.ss:converters:1.0.1'
     implementation 'com.jules.ss:common-dtos:1.0.5'
+    implementation 'com.jules.ss:healthchecks:0.0.3'
 
     //lombok
     compileOnly 'org.projectlombok:lombok'
@@ -41,10 +55,6 @@ dependencies {
     implementation platform("com.github.cloudyrock.mongock:mongock-bom:${mongockVersion}")
     implementation 'com.github.cloudyrock.mongock:mongock-spring-v5'
     implementation 'com.github.cloudyrock.mongock:mongodb-springdata-v3-driver'
-
-    //pub/sub
-    implementation platform('com.google.cloud:libraries-bom:20.9.0')
-    implementation 'com.google.cloud:google-cloud-pubsub'
 
     //kafka
     implementation 'org.springframework.kafka:spring-kafka'
