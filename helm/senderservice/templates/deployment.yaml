@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: {{.Values.deployment.name}}
-          image: "gcr.io/single-system-dev/device-service:{{.Values.app.version}}"
+          image: "gcr.io/single-system-dev/sender-service:{{.Values.app.version}}"
           livenessProbe:
             httpGet:
               path: /actuator/health
