@@ -1,10 +1,13 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   data:
     mongodb:
-      uri: ${URI:mongodb://localhost:27017}
-      database: ${DATABASE:sender-service}
+      uri: ${MONGODB_URI:mongodb://localhost:27017}
+      database: ${MONGODB_DATABASE:sender-service}
   kafka:
     consumer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER:localhost:9092}
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       properties:
@@ -18,11 +21,25 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       value-serializer: org.springframework.kafka.support.serializer.ToStringSerializer
     producer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER:localhost:9092}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.ToStringSerializer
 server:
-  port: ${PORT:1025}
+  port: ${SERVER_PORT:1025}
 mongock:
   start-system-version: 1
   change-logs-scan-package:
     - com.ynero.ss.senderservice.migration
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: ${ACTUATOR_EXPOSE_ENDPOINTS:*}
+  info:
+    git:
+      enabled: true
+  server:
+    port: ${ACTUATOR_PORT:8074}
