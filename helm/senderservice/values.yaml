@@ -1,0 +1,22 @@
+deployment:
+  name: sender-service
+  replicaCount: 1
+  image:
+    name: gcr.io/single-system-dev/sender-service:0.0.1
+  port: 1025
+  mongo:
+    uri: mongodb://mongo-0.mongo:27017/
+    database: sender-service
+  kafka:
+    bootstrap:
+      server: 10.8.15.224:9092
+service:
+  target:
+    port: 1025
+actuator:
+  endpoints:
+    web:
+      exposure:
+        include: *
+  server:
+    port: 8074
