@@ -1,8 +1,14 @@
 deployment:
   name: sender-service
   replicaCount: 1
-  image:
-    name: gcr.io/single-system-dev/sender-service:0.0.1
+  containers:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        cpu: 1000m
+        memory: 4Gi
   port: 1025
   mongo:
     uri: mongodb://mongo-0.mongo:27017/
@@ -20,3 +26,5 @@ actuator:
         include: '*'
   server:
     port: 8074
+env:
+  JDK_JAVA_OPTIONS: "-Xmx3584M"
