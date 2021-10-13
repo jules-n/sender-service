@@ -28,11 +28,16 @@ public class PipelineResultsConsumer {
     private void consume(String message){
         log.info("message: {}", message);
         var map = objectMapper.readValue(message, List.class);
-        List<List< ResultDTO >> dataList = objectMapper.convertValue(map, List.class);
-        dataList.forEach(
-                innerList -> innerList.forEach(
-                        dto -> sendingDataSeeker.find(dto)
-                )
+        map.stream().forEach(
+                val -> {
+                    var list = objectMapper.convertValue(val, List.class);
+                    list.forEach(
+                            el -> {
+                                var dto = objectMapper.convertValue(el, ResultDTO.class);
+                                sendingDataSeeker.find(dto);
+                            }
+                    );
+                }
         );
     }
 }
