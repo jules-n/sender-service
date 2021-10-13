@@ -24,7 +24,7 @@ public class PipelineResultsConsumer {
     @SneakyThrows
     @KafkaListener(topics = "results-sending-data", groupId = "results-sending-data_group_id")
     private void consume(String message){
-        var map = objectMapper.readValue(message, LinkedHashMap.class);
+        var map = objectMapper.readValue(message, List.class);
         List<List< ResultDTO >> dataList = objectMapper.convertValue(map, List.class);
         dataList.forEach(
                 innerList -> innerList.forEach(
