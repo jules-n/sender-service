@@ -4,6 +4,7 @@ plugins {
     id 'com.coditory.integration-test' version '1.2.3'
     id 'java'
     id "com.palantir.git-version" version "0.12.3"
+    id "com.jfrog.artifactory" version '4.24.20'
 }
 
 configurations {
@@ -15,10 +16,11 @@ bootJar {
     archiveFileName = "${project.name}.jar"
 }
 group = 'com.ynero.ss'
-version gitVersion()
 sourceCompatibility = '11'
 targetCompatibility = '11'
-
+def tagVersion(){
+    return ['sh', '-c', 'git describe --abbrev=0 --tags'].execute().text.trim()
+}
 repositories {
     mavenCentral()
     mavenLocal()
@@ -28,8 +30,16 @@ springBoot {
 }
 
 repositories {
-    mavenCentral()
     mavenLocal()
+    mavenCentral()
+    maven {
+        url "http://ss-dev-jenkins:8081/artifactory/ss-artifacts"
+        allowInsecureProtocol true
+        credentials {
+            username = System.getenv('SS_DEV_ARTIFACTORY_USERNAME')
+            password = System.getenv('SS_DEV_ARTIFACTORY_PASSWORD')
+        }
+    }
 }
 
 dependencies {
@@ -38,10 +48,10 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.5.3'
 
     //shared
-    implementation 'com.jules.ss:sending-lib:0.0.1'
-    implementation 'com.jules.ss:converters:1.0.1'
-    implementation 'com.jules.ss:common-dtos:1.0.5'
-    implementation 'com.jules.ss:healthchecks:0.0.3'
+    implementation 'com.ynero.ss:sending-lib:0.0.1'
+    implementation 'com.ynero.ss:converters:0.0.1'
+    implementation 'com.ynero.ss:common-dtos:0.0.1'
+    implementation 'com.ynero.ss:healthchecks:0.0.1'
 
     //lombok
     compileOnly 'org.projectlombok:lombok'
