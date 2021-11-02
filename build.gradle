@@ -18,6 +18,7 @@ bootJar {
 group = 'com.ynero.ss'
 sourceCompatibility = '11'
 targetCompatibility = '11'
+version = tagVersion()
 def tagVersion(){
     return ['sh', '-c', 'git describe --abbrev=0 --tags'].execute().text.trim()
 }
