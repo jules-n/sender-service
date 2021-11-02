@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values.deployment.name}}
+  labels:
+    app: sender-service-app
+    workload: {{.Values.deployment.name}}
+spec:
+  replicas: {{.Values.deployment.replicaCount}}
+  selector:
+    matchLabels:
+      app: sender-service-app
+      workload: {{.Values.deployment.name}}
+  template:
+    metadata:
+      labels:
+        app: sender-service-app
+        workload: {{.Values.deployment.name}}
+    spec:
+      containers:
+        - name: {{.Values.deployment.name}}
+          image: "gcr.io/single-system-dev/sender-service:{{.Values.app.version}}"
+          resources:
+            requests:
+              cpu: {{ .Values.deployment.containers.resources.requests.cpu }}
+              memory: {{ .Values.deployment.containers.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.deployment.containers.resources.limits.cpu }}
+              memory: {{ .Values.deployment.containers.resources.limits.memory }}
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: {{.Values.actuator.server.port}}
+          ports:
+            - containerPort: {{.Values.deployment.port}}
+            - containerPort: {{.Values.actuator.server.port}}
+          env:
+            - name: MONGODB_URI
+              value: "{{ .Values.deployment.mongo.uri}}"
+            - name: MONGODB_DATABASE
+              value: "{{ .Values.deployment.mongo.database}}"
+            - name: KAFKA_BOOTSTRAP_SERVER
+              value: "{{ .Values.deployment.kafka.bootstrap.server}}"
+            - name: SERVER_PORT
+              value: "{{ .Values.deployment.port}}"
+            - name: ACTUATOR_EXPOSE_ENDPOINTS
+              value: "{{ .Values.actuator.endpoints.web.exposure.include}}"
+            - name: ACTUATOR_PORT
+              value: "{{ .Values.actuator.server.port}}"
+            - name: JDK_JAVA_OPTIONS
+              value: "{{ .Values.env.JDK_JAVA_OPTIONS }}"

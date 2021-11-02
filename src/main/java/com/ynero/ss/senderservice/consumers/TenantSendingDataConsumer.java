@@ -27,10 +27,10 @@ public class TenantSendingDataConsumer {
 
     @SneakyThrows
     @KafkaListener(topics = "tenants-sending-data", groupId = "tenants-sending-data_group_id")
-    public void consume(LinkedHashMap message) {
+    public void consume(String message) {
         log.info("new log: {}", message);
-        var dto = objectMapper.convertValue(message, TenantSendingDataDTO.class);
-        log.info("log: {}",dto.getParameters());
+        var map = objectMapper.readValue(message, LinkedHashMap.class);
+        var dto = objectMapper.convertValue(map, TenantSendingDataDTO.class);
         var tenantSendingData = objectMapper.convertValue(dto, TenantSendingData.class);
         tenantSendingData.setDataId(UUID.randomUUID());
         repository.save(tenantSendingData);
